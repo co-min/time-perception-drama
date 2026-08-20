@@ -73,3 +73,13 @@ def ensure_trial_save_dir(
     p = build_trial_save_dir(subject_id, phase, stim_pair_id)
     p.mkdir(parents=True, exist_ok=True)
     return p
+
+
+def get_session_dir(subject_id: str, session_id: str) -> Path:
+    """Single source of truth for the session save directory.
+
+    Returns (and creates)  data/sub-{subject_id}/ses-{session_id}/
+    """
+    session_dir = DATA_DIR / f"sub-{subject_id}" / f"ses-{session_id}"
+    session_dir.mkdir(parents=True, exist_ok=True)
+    return session_dir
