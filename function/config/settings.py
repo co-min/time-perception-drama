@@ -9,7 +9,7 @@ DATA_DIR     = ROOT_DIR / "data"
 # ─── Window ───────────────────────────────────────────────────────────────────
 WINDOW_SIZE      = (1470, 956)   # TODO: adjust to your display
 WINDOW_UNITS     = "pix"
-WINDOW_FULLSCR   = True          # Set True for actual experiment
+WINDOW_FULLSCR   = False          # Set True for actual experiment
 BACKGROUND_COLOR = "black"      
 MONITOR_NAME     = "testMonitor"  # TODO: calibrate your monitor
 SCREEN_NUMBER = 1
@@ -75,6 +75,9 @@ QUESTION_POSITION = (0, 380)
 
 SELECTED_BUTTON_COLOR = "purple"
 BUTTON_COLOR = "gray"
+
+# ─── Neon (Pupil Labs Companion) ───────────────────────────────────────────────
+USE_NEON = False   # True: Neon Companion 연결, False: no-op
 
 # ─── AprilTag (Pupil Labs Neon) ────────────────────────────────────────────────
 # Provisional — must be tested on the actual monitor and adjusted if necessary.

@@ -3,6 +3,7 @@ from psychopy import core
 from psychopy.hardware import keyboard as kb_module
 
 from function.config.window_factory import create_window
+from function.config import settings as cfg
 from function.config.settings import DATA_DIR
 from function.io.event_saver import save_event_log
 from function.io.path_builder import get_subject_dir
@@ -16,14 +17,14 @@ from utils.labjack_trigger import (
     TRIG_EXP_START, TRIG_END, TRIG_Q_SHORT, TRIG_Q_LONG,
 )
 from utils.neon_client import NeonEventClient, NullNeonClient, save_neon_event_log
-
-# ─── 실험 설정 ────────────────────────────────────────────────────────────────
-USE_NEON   = False   # True: Neon Companion 연결, False: no-op
-SUBJECT_ID = "S01"
-SESSION_ID = "01"
+from utils.screen_utils import get_subject_info
 
 
 def main():
+    subject_info = get_subject_info()
+    SUBJECT_ID   = subject_info["subject_id"]
+    SESSION_ID   = subject_info["session"]
+
     win      = create_window()
     tags     = create_neon_apriltags(win)  # created once, stays on AutoDraw for entire experiment
     keyboard = kb_module.Keyboard()
@@ -32,7 +33,7 @@ def main():
 
     neon = (
         NeonEventClient(subject_id=SUBJECT_ID, session_id=SESSION_ID)
-        if USE_NEON else NullNeonClient()
+        if cfg.USE_NEON else NullNeonClient()
     )
 
     video_path    = load_video_paths()
