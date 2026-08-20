@@ -9,7 +9,6 @@ Public API
     NullNeonClient    — no-op drop-in used when USE_NEON=False
     section_start_events(trial_index, segment_label, first=False)
     section_end_events(trial_index, outcome)
-    create_neon_apriltags(win, positions, size)
     save_neon_event_log(save_dir, event_log)
 
 Design notes
@@ -416,49 +415,6 @@ def frame_event_marker(segment_label: str, event_type: str = "onset") -> str:
     return f"{segment_label.upper()}_{event_type.lower()}"
 
 
-# ─── AprilTag factory ─────────────────────────────────────────────────────────
-
-def create_neon_apriltags(win, positions: Sequence, size: float = 0.10) -> List:
-    """Create AprilTagStim markers at screen edges and keep them visible (AutoDraw).
-
-    Parameters
-    ----------
-    win       : psychopy.visual.Window
-    positions : sequence of (x, y) tuples in 'height' units
-    size      : marker size in 'height' units
-
-    Returns
-    -------
-    List of AprilTagStim instances. The caller must keep a reference so that
-    Python does not garbage-collect them while the window is open.
-
-    Raises RuntimeError if psychopy-eyetracker-pupil-labs is not installed.
-    """
-    try:
-        from psychopy_eyetracker_pupil_labs.pupil_labs.stimuli import AprilTagStim
-    except ImportError:
-        raise RuntimeError(
-            "psychopy-eyetracker-pupil-labs not installed. "
-            "Run: pip install psychopy-eyetracker-pupil-labs"
-        )
-    tags = [
-        AprilTagStim(
-            win=win,
-            marker_id=i,
-            units="height",
-            pos=pos,
-            size=(size, size),
-            interpolate=False,
-            autoLog=False,
-        )
-        for i, pos in enumerate(positions)
-    ]
-    for tag in tags:
-        tag.setAutoDraw(True)
-    print(f"[Neon] {len(tags)} AprilTag markers created and set to AutoDraw.")
-    return tags
-
-
 # ─── Event log saver ─────────────────────────────────────────────────────────
 
 def save_neon_event_log(save_dir: Union[str, Path], event_log: List[Dict]) -> Optional[str]:
@@ -472,7 +428,7 @@ def save_neon_event_log(save_dir: Union[str, Path], event_log: List[Dict]) -> Op
         return None
     try:
         path = Path(save_dir) / "neon_event_log.csv"
-        _pd.DataFrame(event_log, columns=list(LOG_COLUMNS)).to_excel(
+        _pd.DataFrame(event_log, columns=list(LOG_COLUMNS)).to_csv(
             str(path), index=False
         )
         print(f"[Neon] Event log saved → {path}")

@@ -92,4 +92,14 @@ def show_practice_screen(win, text: str) -> str:
             return "continue"
 
 
-
+def iti(win):
+    iti_screen = visual.TextStim(
+            win,
+            text="+",
+            font=cfg.FONT,
+            pos=(0, 0),
+            height=38,
+            color="white",
+            wrapWidth=1400,
+        )
+    return iti_screen

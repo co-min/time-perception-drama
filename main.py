@@ -4,8 +4,13 @@ from psychopy.hardware import keyboard as kb_module
 
 from function.config.window_factory import create_window
 from function.config.settings import DATA_DIR
+from function.io.event_saver import save_event_log
+from function.io.path_builder import get_subject_dir
 from function.phases.data_loader import load_video_paths
 from function.phases.phase import run_trial
+from function.phases.run_instruction import run_instruction
+from function.phases.run_break import run_break
+from utils.apriltag_utils import create_neon_apriltags
 from utils.labjack_trigger import (
     init_labjack, close_labjack, send_trigger,
     TRIG_EXP_START, TRIG_END, TRIG_Q_SHORT, TRIG_Q_LONG,
@@ -20,20 +25,29 @@ SESSION_ID = "01"
 
 def main():
     win      = create_window()
+    tags     = create_neon_apriltags(win)  # created once, stays on AutoDraw for entire experiment
     keyboard = kb_module.Keyboard()
     lj       = init_labjack()
+    event_log  = []
 
     neon = (
         NeonEventClient(subject_id=SUBJECT_ID, session_id=SESSION_ID)
         if USE_NEON else NullNeonClient()
     )
 
-    video_paths    = load_video_paths()
-    question_types = ["short"] * 16 + ["long"] * 16
+    video_path    = load_video_paths()
+    video_paths = random.sample(video_path, 2)
+    n_videos       = len(video_paths)
+    n_short        = n_videos // 2
+    question_types = ["short"] * n_short + ["long"] * (n_videos - n_short)
     random.shuffle(question_types)
     results = []
 
     try:
+        run_instruction(win, keyboard)
+
+        exp_clock = core.Clock()
+
         neon.start_session()
         send_trigger(lj, TRIG_EXP_START)
 
@@ -51,6 +65,8 @@ def main():
                 lj_handle=lj,
                 neon=neon,
                 trial_i=trial_num,
+                event_log=event_log,
+                exp_clock=exp_clock,
             )
 
             results.append({
@@ -61,6 +77,10 @@ def main():
                 "rt":            rt,
             })
             print(f"  → response: {response}, rt: {rt}")
+
+            if trial_num < n_videos:
+                if trial_num % 10 == 0:
+                    run_break(win, keyboard)
 
         send_trigger(lj, TRIG_END)
 
@@ -73,6 +93,7 @@ def main():
         close_labjack(lj)
         DATA_DIR.mkdir(parents=True, exist_ok=True)
         save_neon_event_log(DATA_DIR, neon.event_log)
+        save_event_log(event_log, get_subject_dir(SUBJECT_ID))
         win.close()
         core.quit()
 

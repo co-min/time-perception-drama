@@ -8,6 +8,7 @@ from function.config.settings import (
     SELECTED_BUTTON_COLOR, BUTTON_COLOR, QUESTION_POSITION,
     RESPONSE_TEXT_HEIGHT, RESPONSE_TEXT_LONG, RESPONSE_TEXT_SHORT,
 )
+from function.io.event_logger import log_event
 from utils.labjack_trigger import (
     send_trigger,
     TRIG_RESPONSE_ONSET, TRIG_RESP_YES, TRIG_RESP_NO, TRIG_RESP_TIMEOUT,
@@ -15,7 +16,8 @@ from utils.labjack_trigger import (
 from utils.neon_client import section_start_events, section_end_events
 
 
-def run_response(win, keyboard, question_type, *, lj_handle=None, neon=None, trial_i=0):
+def run_response(win, keyboard, question_type, *, lj_handle=None, neon=None, trial_i=0,
+                  event_log=None, exp_clock=None):
 
     selected = None
 
@@ -78,6 +80,7 @@ def run_response(win, keyboard, question_type, *, lj_handle=None, neon=None, tri
     keyboard.clock.reset()
 
     first_flip = True
+    flip_time = None
     while True:
         if first_flip:
             win.callOnFlip(send_trigger, lj_handle, TRIG_RESPONSE_ONSET)
@@ -88,7 +91,6 @@ def run_response(win, keyboard, question_type, *, lj_handle=None, neon=None, tri
                     phase="response",
                     trial_index=trial_i,
                 )
-            first_flip = False
 
         if selected == 0:
             yes_button.fillColor = SELECTED_BUTTON_COLOR
@@ -106,7 +108,10 @@ def run_response(win, keyboard, question_type, *, lj_handle=None, neon=None, tri
         no_text.draw()
         question.draw()
 
-        win.flip()
+        flip_time = win.flip()
+        if first_flip:
+            log_event(event_log, trial_i, "RESPONSE_ONSET", exp_clock, flip_time=flip_time)
+            first_flip = False
 
         if keyboard.clock.getTime() > MAX_RESPONSE_TIME:
             send_trigger(lj_handle, TRIG_RESP_TIMEOUT)
@@ -115,6 +120,7 @@ def run_response(win, keyboard, question_type, *, lj_handle=None, neon=None, tri
                     section_end_events(trial_i, "TIMEOUT"),
                     metadata={"phase": "response", "trial_index": trial_i},
                 )
+            log_event(event_log, trial_i, "RESPONSE_TIMEOUT", exp_clock)
             return "timeout", None
 
         keys = keyboard.getKeys(
@@ -148,6 +154,7 @@ def run_response(win, keyboard, question_type, *, lj_handle=None, neon=None, tri
                     section_end_events(trial_i, response.upper()),
                     metadata={"phase": "response", "trial_index": trial_i},
                 )
+            log_event(event_log, trial_i, "RESPONSE_CONFIRMED", exp_clock)
             return response, key.rt
 
 
