@@ -51,7 +51,7 @@ def main():
     )
 
     video_path    = load_video_paths()
-    video_paths = random.sample(video_path, 2)
+    video_paths = random.sample(video_path)
     n_videos       = len(video_paths)
     n_short        = n_videos // 2
     question_types = ["short"] * n_short + ["long"] * (n_videos - n_short)
