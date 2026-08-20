@@ -7,7 +7,7 @@ from function.config import settings as cfg
 # ─────────────────────────────────────────────────────────────────────────────
 
 def get_subject_info():
-    dlg = gui.Dlg(title="Chinese Character Experiment")
+    dlg = gui.Dlg(title="Drama Time Perception Experiment")
     dlg.addField("Subject ID:", "001")
     dlg.addField("Session:",    "1")
     data = dlg.show()
