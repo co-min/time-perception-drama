@@ -1,1 +1,0 @@
-event_sequence,session_id,subject_id,recording_id,task_type,phase,trial_index,attempt_index,event_name,host_timestamp_unix_ns,companion_timestamp_unix_ns,clock_offset_ns,send_attempt,send_success,retried,send_error

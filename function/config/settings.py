@@ -9,7 +9,7 @@ DATA_DIR     = ROOT_DIR / "data"
 # ─── Window ───────────────────────────────────────────────────────────────────
 WINDOW_SIZE      = (1470, 956)   # TODO: adjust to your display
 WINDOW_UNITS     = "pix"
-WINDOW_FULLSCR   = False          # Set True for actual experiment
+WINDOW_FULLSCR   = True          # Set True for actual experiment
 BACKGROUND_COLOR = "black"      
 MONITOR_NAME     = "testMonitor"  # TODO: calibrate your monitor
 SCREEN_NUMBER = 1
@@ -89,4 +89,14 @@ APRILTAG_POSITIONS = (
     (-0.70, 0.44),
     (0.70, 0.44),
 )
+
+# ─── TEMPORARY DIAGNOSTIC (no_audio A/B test) ──────────────────────────────────
+# Remove this whole block, and its call sites in main.py / phase.py /
+# run_video.py, once the audio-timing comparison is done.
+NO_AUDIO_DIAGNOSTIC = True   # TEMPORARY DIAGNOSTIC: True -> MovieStim(noAudio=True)
+
+# Set to an int (e.g. 42) for Run A AND Run B so random.sample/random.shuffle
+# in main.py produce the identical video order in both runs. None = normal,
+# unseeded production randomization (unaffected).
+DIAGNOSTIC_FIXED_SEED = True  # TEMPORARY DIAGNOSTIC
 

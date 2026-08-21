@@ -35,5 +35,6 @@ def run_fixation(win, keyboard, *, trial_i=0, event_log=None, exp_clock=None):
             break
 
         if keyboard.getKeys(keyList=[QUIT_KEY], waitRelease=False):
+            print(f"[DEBUG] QUIT_KEY caught in run_fixation (trial {trial_i})")  # TEMPORARY diagnostic
             win.close()
             core.quit()

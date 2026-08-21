@@ -77,12 +77,12 @@ def run_response(win, keyboard, question_type, *, lj_handle=None, neon=None, tri
         raise ValueError(f"Unknown question_type: {question_type!r}")
 
     keyboard.clearEvents()
-    keyboard.clock.reset()
 
     first_flip = True
     flip_time = None
     while True:
         if first_flip:
+            win.callOnFlip(keyboard.clock.reset)
             win.callOnFlip(send_trigger, lj_handle, TRIG_RESPONSE_ONSET)
             if neon is not None:
                 neon.call_on_flip(
@@ -134,6 +134,7 @@ def run_response(win, keyboard, question_type, *, lj_handle=None, neon=None, tri
         key = keys[0]
 
         if key.name == QUIT_KEY:
+            print(f"[DEBUG] QUIT_KEY caught in run_response (trial {trial_i})")  # TEMPORARY diagnostic
             win.close()
             core.quit()
 

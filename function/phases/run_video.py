@@ -7,12 +7,13 @@ from utils.neon_client import section_start_events, section_end_events
 
 
 def play_video(win, video_path, *, lj_handle=None, neon=None, trial_i=0,
-                event_log=None, exp_clock=None):
+                event_log=None, exp_clock=None, no_audio=False):  # TEMPORARY DIAGNOSTIC: no_audio
     movie = visual.MovieStim(
         win,
         filename=str(video_path),
         size=VIDEO_SIZE,
         loop=False,
+        noAudio=no_audio,  # TEMPORARY DIAGNOSTIC
     )
 
     first_flip = True

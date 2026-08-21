@@ -8,7 +8,7 @@ from utils.inter_trial import run_gaussian_iti
 
 
 def run_trial(win, keyboard, video_path, question_type, *, lj_handle=None, neon=None, trial_i=1,
-              event_log=None, exp_clock=None):
+              event_log=None, exp_clock=None, no_audio=False):  # TEMPORARY DIAGNOSTIC: no_audio
     run_gaussian_iti(
         win=win,
         global_clock=exp_clock,
@@ -24,9 +24,10 @@ def run_trial(win, keyboard, video_path, question_type, *, lj_handle=None, neon=
     run_trial_number(win, trial_i, event_log=event_log, exp_clock=exp_clock)
 
     play_video(win, video_path, lj_handle=lj_handle, neon=neon, trial_i=trial_i,
-               event_log=event_log, exp_clock=exp_clock)
+               event_log=event_log, exp_clock=exp_clock, no_audio=no_audio)  # TEMPORARY DIAGNOSTIC
 
     run_fixation(win, keyboard, trial_i=trial_i, event_log=event_log, exp_clock=exp_clock)
+    print(f"[DEBUG] fixation done, entering run_response (trial {trial_i})")  # TEMPORARY diagnostic
 
     response, rt = run_response(
         win=win,
