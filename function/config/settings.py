@@ -8,7 +8,7 @@ AUDIO_DIR = ROOT_DIR / "stimuli" / "audio"
 DATA_DIR     = ROOT_DIR / "data"
 
 # ─── Window ───────────────────────────────────────────────────────────────────
-WINDOW_SIZE      = (1470, 956)   # TODO: adjust to your display
+WINDOW_SIZE      = (1920, 1080)   # TODO: adjust to your display
 WINDOW_UNITS     = "pix"
 WINDOW_FULLSCR   = True          # Set True for actual experiment
 BACKGROUND_COLOR = "black"      
@@ -19,9 +19,9 @@ SCREEN_NUMBER = 1
 MAX_RESPONSE_TIME = 30.0          # seconds; None = unlimited
 ITI_DURATION      = 1.0          # inter-trial interval (seconds)
 FRAME_RATE        = 60           # Hz – used for frame log sanity checks
-VIDEO_SIZE        = (1280, 720)
+VIDEO_SIZE        = (1536, 864)
 FIXATION_DURATION = 10          # seconds; fixation cross duration between video and response
-ANCHOR_DURATION = 60.0
+ANCHOR_DURATION = 1.0
 
 # ─── Trial Number Screen ──────────────────────────────────────────────────────
 TRIAL_NUMBER_DURATION      = 0.75         # seconds; how long the "Trial N" screen is shown
@@ -34,16 +34,25 @@ TEXT_COLOR       = "white"
 
 # ─── Response ────────────────────────────────────────────────────────────────────
 
-YES_KEY = "left"
-NO_KEY = "right"
-COMFIRM_KEY = "space"
-QUIT_KEY   = "escape"
-PAUSE_KEY  = "p"
+SHORT_KEY = "left"
+LONG_KEY = "right"
+CONFIRM_KEY = "space"
+QUIT_KEY = "escape"
+PAUSE_KEY = "p"
 
-
-RESPONSE_TEXT_SHORT = "영상의 길이가 1분 보다 짧았나요?"
-RESPONSE_TEXT_LONG = "영상의 길이가 1분 보다 길었나요?"
+RESPONSE_QUESTION = "이 영상의 길이는 1분과 비교했을 때 어땠나요?"
 RESPONSE_TEXT_HEIGHT = 40
+
+SHORT_TEXT = "짧았다"
+LONG_TEXT = "길었다"
+
+BUTTON_SIZE = (350, 180)
+SHORT_POSITION = (-300, 0)
+LONG_POSITION = (300, 0)
+QUESTION_POSITION = (0, 380)
+
+SELECTED_BUTTON_COLOR = "purple"
+BUTTON_COLOR = "gray"
 
 # ─── Instruction / Break ──────────────────────────────────────────────────────
 
@@ -65,18 +74,17 @@ BREAK_TEXT = (
     "준비가 되었다면 s를 눌러 계속 진행해 주세요"
 )
 
-YES_TEXT = "예"
-NO_TEXT = "아니오"
+PAUSE_TEXT = (
+    "일시정지 중입니다.\n\n"
+    "계속하려면 s를 눌러주세요."
+)
 
-BUTTON_SIZE = (350, 180)
-YES_POSITION = (-300, 0)
-NO_POSITION = (300, 0)
-QUESTION_POSITION = (0, 380)
+ENDING_TEXT = (
+    "모두 종료되었습니다.\n\n"
+    "참여해 주셔서 감사합니다.\n\n"
+    "종료하려면 ESC 키를 눌러주세요."
+)
 
-
-
-SELECTED_BUTTON_COLOR = "purple"
-BUTTON_COLOR = "gray"
 
 # ─── Neon (Pupil Labs Companion) ───────────────────────────────────────────────
 USE_NEON = False   # True: Neon Companion 연결, False: no-op

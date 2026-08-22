@@ -5,7 +5,7 @@ from function.config.settings import (
     TRIAL_NUMBER_TEXT_TEMPLATE,
 )
 from function.io.event_logger import log_event
-from utils.event_utils import check_escape
+from utils.event_utils import check_escape, check_pause
 
 
 def run_trial_number(win, trial_i, rec, *, event_log=None):
@@ -32,6 +32,8 @@ def run_trial_number(win, trial_i, rec, *, event_log=None):
             first_flip = False
 
         check_escape(win)
+        check_pause(win, event_log=event_log, trial_i=trial_i,
+                    global_clock=rec.global_clock, phase_clock=phase_clock)
 
         if phase_clock.getTime() >= TRIAL_NUMBER_DURATION:
             log_event(event_log, trial_i, "TRIAL_NUMBER_OFFSET", rec.global_clock, flip_time=flip_time)

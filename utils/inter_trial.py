@@ -1,6 +1,6 @@
 from psychopy import visual, core, event
 
-from utils.event_utils import check_escape
+from utils.event_utils import check_escape, check_pause
 from function.io.event_logger import log_event
 import random
 
@@ -24,6 +24,8 @@ def run_gaussian_iti(win, rec, min_t=0.6, max_t=1.8, mean_t=1.2, sd_t=0.3,
             first_flip = False
 
         check_escape(win)
+        check_pause(win, event_log=event_log, trial_i=trial_id,
+                    global_clock=rec.global_clock, phase_clock=phase_clock)
 
     log_event(event_log, trial_id, "ITI_OFFSET", rec.global_clock, flip_time=flip_time)
 

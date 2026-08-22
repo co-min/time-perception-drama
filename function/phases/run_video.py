@@ -1,10 +1,11 @@
 import time
 
-from psychopy import visual, sound
-from function.config.settings import FRAME_RATE, VIDEO_SIZE
+from psychopy import visual, sound, event
+from function.config.settings import FRAME_RATE, VIDEO_SIZE, PAUSE_KEY
 from function.io.event_logger import log_event
 from function.io.frame_marker import get_shared_marker
 from function.io.timing_diagnostics import record_video_diagnostics
+from function.phases.run_pause import run_pause
 from utils.labjack_trigger import send_trigger, TRIG_VIDEO_ONSET, TRIG_VIDEO_OFFSET
 from utils.neon_client import section_start_events, section_end_events
 from function.phases.data_loader import get_audio_path
@@ -55,6 +56,13 @@ def play_video(win, video_path, rec, *, lj_handle=None, neon=None, trial_i=0,
         if first_flip:
             log_event(event_log, trial_i, "VIDEO_ONSET", rec.global_clock, flip_time=flip_time)
             first_flip = False
+
+        if event.getKeys(keyList=[PAUSE_KEY]):
+            audio.pause()
+            movie.pause()
+            run_pause(win, event_log=event_log, trial_i=trial_i, global_clock=rec.global_clock)
+            movie.play()
+            audio.play()
     win.recordFrameIntervals = False
     record_video_diagnostics(win, trial_i, video_path.name, movie_creation_time_s, FRAME_RATE)
     audio.stop()

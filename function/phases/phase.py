@@ -9,7 +9,7 @@ from function.phases.run_video import play_video
 from utils.inter_trial import run_gaussian_iti
 
 
-def run_trial(win, keyboard, video_path, question_type, *, lj_handle=None, neon=None, trial_i=1,
+def run_trial(win, keyboard, video_path, *, lj_handle=None, neon=None, trial_i=1,
             event_log=None, exp_clock=None, session_dir=None):
     rec = FrameRecorder(
         make_frame_log(phase="iti", trial_id=trial_i, stim_pair_id=""),
@@ -42,7 +42,6 @@ def run_trial(win, keyboard, video_path, question_type, *, lj_handle=None, neon=
     response, rt = run_response(
         win=win,
         keyboard=keyboard,
-        question_type=question_type,
         rec=rec,
         lj_handle=lj_handle,
         neon=neon,

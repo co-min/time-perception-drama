@@ -46,7 +46,7 @@ def record_video_diagnostics(
         # the flip-to-flip gap right after the VIDEO_ONSET flip (see module
         # docstring).
         "first_interval_s": round(intervals[0], 6) if intervals else None,
-        "first_interval_dropped": (intervals[0] > threshold) if intervals else None,
+        "first_interval_dropped": bool(intervals[0] > threshold) if intervals else None,
     }
     _video_records.append(record)
     return record

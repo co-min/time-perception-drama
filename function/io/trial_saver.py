@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Dict
 
 TRIALS_FILENAME = "trials.csv"
-FIELDNAMES = ["trial", "video", "question_type", "response", "rt"]
+FIELDNAMES = ["trial", "video", "response", "rt"]
 
 
 def append_trial_row(row: Dict, session_dir: Path) -> Path:

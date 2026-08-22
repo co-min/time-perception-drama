@@ -18,10 +18,11 @@ from function.phases.phase import run_trial
 from function.phases.run_fixation import run_fixation
 from function.phases.run_instruction import run_instruction
 from function.phases.run_break import run_break
+from function.phases.run_ending import run_ending
 from utils.apriltag_utils import create_neon_apriltags
 from utils.labjack_trigger import (
     init_labjack, close_labjack, send_trigger,
-    TRIG_EXP_START, TRIG_END, TRIG_Q_SHORT, TRIG_Q_LONG,
+    TRIG_EXP_START, TRIG_END,
 )
 from utils.neon_client import NeonEventClient, NullNeonClient, save_neon_event_log
 from utils.screen_utils import get_subject_info
@@ -56,12 +57,21 @@ def main():
     )
 
     video_path    = load_video_paths()
+
+
+    # # video_path[:2] slicing
     video_paths = video_path
+
+    # # 영상 순서 랜덤화
+    random.shuffle(video_paths)
+
+
+    # 전체 영상 중 랜덤하게 선택
+    # video_paths = random.sample(video_path, k=1)
+
+
     validate_audio_paths(video_paths)
     n_videos       = len(video_paths)
-    n_short        = n_videos // 2
-    question_types = ["short"] * n_short + ["long"] * (n_videos - n_short)
-    random.shuffle(question_types)
     results = []
 
     save_session_info(
@@ -96,17 +106,13 @@ def main():
                     duration=cfg.ANCHOR_DURATION)
 
 
-        for trial_num, (video_path, q_type) in enumerate(
-            zip(video_paths, question_types), start=1
+        for trial_num, video_path in enumerate(
+            video_paths, start=1,
         ):
-            print(f"Trial {trial_num}: {video_path.name} | {q_type}")
-            send_trigger(lj, TRIG_Q_SHORT if q_type == "short" else TRIG_Q_LONG)
-
             response, rt = run_trial(
                 win=win,
                 keyboard=keyboard,
                 video_path=video_path,
-                question_type=q_type,
                 lj_handle=lj,
                 neon=neon,
                 trial_i=trial_num,
@@ -118,7 +124,6 @@ def main():
             trial_row = {
                 "trial":         trial_num,
                 "video":         video_path.name,
-                "question_type": q_type,
                 "response":      response,
                 "rt":            rt,
             }
@@ -135,6 +140,8 @@ def main():
         print("\n=== Results ===")
         for r in results:
             print(r)
+
+        run_ending(win, keyboard)
 
     finally:
         neon.close()
