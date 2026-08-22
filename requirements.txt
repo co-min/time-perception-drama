@@ -1,1 +1,3 @@
-psychopy
+psychopy==2025.1.1
+psychopy-eyetracker-pupil-labs
+labjack-ljm

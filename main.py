@@ -10,7 +10,7 @@ from function.io.event_saver import save_event_log
 from function.io.path_builder import get_session_dir
 from function.io.session_saver import save_session_info
 from function.io.trial_saver import append_trial_row
-from function.phases.data_loader import load_video_paths
+from function.phases.data_loader import load_video_paths, validate_audio_paths
 from function.phases.phase import run_trial
 from function.phases.run_instruction import run_instruction
 from function.phases.run_break import run_break
@@ -52,6 +52,7 @@ def main():
 
     video_path    = load_video_paths()
     video_paths = video_path
+    validate_audio_paths(video_paths)
     n_videos       = len(video_paths)
     n_short        = n_videos // 2
     question_types = ["short"] * n_short + ["long"] * (n_videos - n_short)

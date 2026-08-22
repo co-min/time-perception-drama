@@ -4,6 +4,7 @@ from pathlib import Path
 # ─── Paths ───────────────────────────────────────────────────────────────────
 ROOT_DIR     = Path(__file__).resolve().parents[2]
 STIMULUS_DIR = ROOT_DIR / "stimuli" / "video"
+AUDIO_DIR = ROOT_DIR / "stimuli" / "audio"
 DATA_DIR     = ROOT_DIR / "data"
 
 # ─── Window ───────────────────────────────────────────────────────────────────
@@ -77,7 +78,7 @@ SELECTED_BUTTON_COLOR = "purple"
 BUTTON_COLOR = "gray"
 
 # ─── Neon (Pupil Labs Companion) ───────────────────────────────────────────────
-USE_NEON = False   # True: Neon Companion 연결, False: no-op
+USE_NEON = True   # True: Neon Companion 연결, False: no-op
 
 # ─── AprilTag (Pupil Labs Neon) ────────────────────────────────────────────────
 # Provisional — must be tested on the actual monitor and adjusted if necessary.
