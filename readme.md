@@ -47,7 +47,6 @@ function/
   config/
     settings.py          모든 실험 설정값 (창 크기, 타이밍, 텍스트, 키, Neon/AprilTag 등)
     window_factory.py     PsychoPy Window 생성
-    key_mapping.py
   phases/
     data_loader.py        stimuli/video/*.mp4 목록 로드
     phase.py               한 시행(trial)의 전체 흐름 조합
@@ -72,7 +71,7 @@ utils/
   labjack_trigger.py        LabJack T4 TTL 트리거 (EIO 데이터 8핀 + CIO0 latch)
   neon_client.py             Pupil Labs Neon REST API 클라이언트 (NeonEventClient / NullNeonClient)
   apriltag_utils.py          Neon 시야 정합용 AprilTag 4개 코너 표시
-  response.py, event_utils.py, inter_trial.py
+  event_utils.py, inter_trial.py
 
 stimuli/video/              실험에 사용하는 드라마 영상 클립 (.mp4)
 data/                        시행 결과 저장 위치 (git에 커밋되지 않음)

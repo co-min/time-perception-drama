@@ -7,11 +7,15 @@ from psychopy.hardware import keyboard as kb_module
 from function.config.window_factory import create_window
 from function.config import settings as cfg
 from function.io.event_saver import save_event_log
+from function.io.frame_logger import FrameRecorder, make_frame_log
+from function.io.frame_marker import init_marker
 from function.io.path_builder import get_session_dir
+from function.io.timing_diagnostics import save_timing_diagnostics
 from function.io.session_saver import save_session_info
 from function.io.trial_saver import append_trial_row
 from function.phases.data_loader import load_video_paths, validate_audio_paths
 from function.phases.phase import run_trial
+from function.phases.run_fixation import run_fixation
 from function.phases.run_instruction import run_instruction
 from function.phases.run_break import run_break
 from utils.apriltag_utils import create_neon_apriltags
@@ -41,6 +45,7 @@ def main():
 
     win      = create_window()
     tags     = create_neon_apriltags(win)  # created once, stays on AutoDraw for entire experiment
+    init_marker(win)  # shared photodiode sync marker, used in run_video/run_response
     keyboard = kb_module.Keyboard()
     lj       = init_labjack()
     event_log  = []
@@ -72,12 +77,24 @@ def main():
     )
 
     try:
-        run_instruction(win, keyboard)
+        run_instruction(win, keyboard,text=cfg.INSTRUCTION_TEXT)
 
         exp_clock = core.Clock()
 
         neon.start_session()
         send_trigger(lj, TRIG_EXP_START)
+
+        run_instruction(win, keyboard,
+                        text = "다음은 1분간 지속되는 화면입니다."
+                        )
+
+        anchor_rec = FrameRecorder(
+            make_frame_log(phase="anchor", trial_id=0, stim_pair_id=""),
+            exp_clock,
+        )
+        run_fixation(win, keyboard, anchor_rec, trial_i=0, event_log=event_log,
+                    duration=cfg.ANCHOR_DURATION)
+
 
         for trial_num, (video_path, q_type) in enumerate(
             zip(video_paths, question_types), start=1
@@ -95,6 +112,7 @@ def main():
                 trial_i=trial_num,
                 event_log=event_log,
                 exp_clock=exp_clock,
+                session_dir=session_dir,
             )
 
             trial_row = {
@@ -123,6 +141,7 @@ def main():
         close_labjack(lj)
         save_neon_event_log(session_dir, neon.event_log)
         save_event_log(event_log, session_dir)
+        save_timing_diagnostics(session_dir)
         win.close()
         core.quit()
 

@@ -8,7 +8,7 @@ from function.io.event_logger import log_event
 from utils.event_utils import check_escape
 
 
-def run_trial_number(win, trial_i, *, event_log=None, exp_clock=None):
+def run_trial_number(win, trial_i, rec, *, event_log=None):
     """Briefly show 'Trial N' (current trial only, no total) before the video."""
     trial_number_text = visual.TextStim(
         win=win,
@@ -26,13 +26,13 @@ def run_trial_number(win, trial_i, *, event_log=None, exp_clock=None):
             win.callOnFlip(phase_clock.reset)
 
         trial_number_text.draw()
-        flip_time = win.flip()
+        flip_time = rec.flip_and_log(win)
         if first_flip:
-            log_event(event_log, trial_i, "TRIAL_NUMBER_ONSET", exp_clock, flip_time=flip_time)
+            log_event(event_log, trial_i, "TRIAL_NUMBER_ONSET", rec.global_clock, flip_time=flip_time)
             first_flip = False
 
         check_escape(win)
 
         if phase_clock.getTime() >= TRIAL_NUMBER_DURATION:
-            log_event(event_log, trial_i, "TRIAL_NUMBER_OFFSET", exp_clock, flip_time=flip_time)
+            log_event(event_log, trial_i, "TRIAL_NUMBER_OFFSET", rec.global_clock, flip_time=flip_time)
             break

@@ -41,6 +41,17 @@ def set_onset(log: FrameLog, t: float) -> FrameLog:
     return log
 
 
+def set_phase(log: FrameLog, phase: str) -> FrameLog:
+    """Return a new FrameLog with its phase label changed to *phase*.
+
+    Used to relabel a single trial-long FrameLog as it moves between
+    sub-phases (iti -> trial_number -> video -> fixation -> response)
+    so each accumulated row still records which sub-phase it belongs to.
+    """
+    log["phase"] = phase
+    return log
+
+
 def log_frame(
     log: FrameLog,
     frame_idx: int,
@@ -96,14 +107,18 @@ class FrameRecorder:
         self.global_clock = global_clock
         self.idx = 0
 
-    def start_segment(self) -> None:
+    def start_segment(self, phase: Optional[str] = None) -> None:
         """Mark the next ``flip_and_log`` as a new segment's first frame.
 
         Resets the frame counter to 0 so the next flip re-sets onset. Use when
         one phase presents several independently-timed segments through the same
-        log (e.g. Phase 2's sequential option presentation).
+        log (e.g. Phase 2's sequential option presentation). Pass *phase* to
+        relabel the log for the upcoming segment (e.g. a single trial-long
+        recorder moving from "iti" to "video" to "response").
         """
         self.idx = 0
+        if phase is not None:
+            self.frame_log = set_phase(self.frame_log, phase)
 
     def flip_and_log(self, win, *, marker: Optional[str] = None) -> float:
         """Flip the window, log the frame, and return ``flip_time``.

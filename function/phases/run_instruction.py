@@ -6,7 +6,7 @@ from function.config.settings import (
 )
 
 
-def run_instruction(win, keyboard):
+def run_instruction(win, keyboard,text):
     """Show the instruction screen and block until START_KEY is pressed.
 
     QUIT_KEY exits immediately, even if it arrives alongside other keys
@@ -14,7 +14,7 @@ def run_instruction(win, keyboard):
     """
     instruction = visual.TextStim(
         win=win,
-        text=INSTRUCTION_TEXT,
+        text=text,
         font=FONT,
         pos=(0, 0),
         color=TEXT_COLOR,

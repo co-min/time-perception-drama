@@ -6,7 +6,7 @@ from function.config.settings import (
 from function.io.event_logger import log_event
 
 
-def run_fixation(win, keyboard, *, trial_i=0, event_log=None, exp_clock=None):
+def run_fixation(win, keyboard, rec, *, trial_i=0, event_log=None, duration=FIXATION_DURATION):
     fixation = visual.TextStim(
         win=win,
         text="+",
@@ -25,13 +25,13 @@ def run_fixation(win, keyboard, *, trial_i=0, event_log=None, exp_clock=None):
             win.callOnFlip(fixation_clock.reset)
 
         fixation.draw()
-        flip_time = win.flip()
+        flip_time = rec.flip_and_log(win)
         if first_flip:
-            log_event(event_log, trial_i, "FIXATION_ONSET", exp_clock, flip_time=flip_time)
+            log_event(event_log, trial_i, "FIXATION_ONSET", rec.global_clock, flip_time=flip_time)
             first_flip = False
 
-        if fixation_clock.getTime() >= FIXATION_DURATION:
-            log_event(event_log, trial_i, "FIXATION_OFFSET", exp_clock, flip_time=flip_time)
+        if fixation_clock.getTime() >= duration:
+            log_event(event_log, trial_i, "FIXATION_OFFSET", rec.global_clock, flip_time=flip_time)
             break
 
         if keyboard.getKeys(keyList=[QUIT_KEY], waitRelease=False):

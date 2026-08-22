@@ -1,3 +1,5 @@
+import time
+
 from psychopy import visual, core
 
 from function.config.settings import (
@@ -9,6 +11,8 @@ from function.config.settings import (
     RESPONSE_TEXT_HEIGHT, RESPONSE_TEXT_LONG, RESPONSE_TEXT_SHORT,
 )
 from function.io.event_logger import log_event
+from function.io.frame_marker import get_shared_marker
+from function.io.timing_diagnostics import record_response_construction
 from utils.labjack_trigger import (
     send_trigger,
     TRIG_RESPONSE_ONSET, TRIG_RESP_YES, TRIG_RESP_NO, TRIG_RESP_TIMEOUT,
@@ -16,10 +20,12 @@ from utils.labjack_trigger import (
 from utils.neon_client import section_start_events, section_end_events
 
 
-def run_response(win, keyboard, question_type, *, lj_handle=None, neon=None, trial_i=0,
-                  event_log=None, exp_clock=None):
+def run_response(win, keyboard, question_type, rec, *, lj_handle=None, neon=None, trial_i=0,
+                  event_log=None):
 
+    construction_start = time.perf_counter()
     selected = None
+    marker = get_shared_marker()
 
     yes_button = visual.Rect(
         win=win,
@@ -76,6 +82,8 @@ def run_response(win, keyboard, question_type, *, lj_handle=None, neon=None, tri
     else:
         raise ValueError(f"Unknown question_type: {question_type!r}")
 
+    record_response_construction(trial_i, time.perf_counter() - construction_start)
+
     keyboard.clearEvents()
 
     first_flip = True
@@ -91,6 +99,8 @@ def run_response(win, keyboard, question_type, *, lj_handle=None, neon=None, tri
                     phase="response",
                     trial_index=trial_i,
                 )
+            if marker is not None:
+                marker.trigger()
 
         if selected == 0:
             yes_button.fillColor = SELECTED_BUTTON_COLOR
@@ -107,10 +117,12 @@ def run_response(win, keyboard, question_type, *, lj_handle=None, neon=None, tri
         yes_text.draw()
         no_text.draw()
         question.draw()
+        if marker is not None:
+            marker.draw()
 
-        flip_time = win.flip()
+        flip_time = rec.flip_and_log(win)
         if first_flip:
-            log_event(event_log, trial_i, "RESPONSE_ONSET", exp_clock, flip_time=flip_time)
+            log_event(event_log, trial_i, "RESPONSE_ONSET", rec.global_clock, flip_time=flip_time)
             first_flip = False
 
         if keyboard.clock.getTime() > MAX_RESPONSE_TIME:
@@ -120,7 +132,7 @@ def run_response(win, keyboard, question_type, *, lj_handle=None, neon=None, tri
                     section_end_events(trial_i, "TIMEOUT"),
                     metadata={"phase": "response", "trial_index": trial_i},
                 )
-            log_event(event_log, trial_i, "RESPONSE_TIMEOUT", exp_clock)
+            log_event(event_log, trial_i, "RESPONSE_TIMEOUT", rec.global_clock)
             return "timeout", None
 
         keys = keyboard.getKeys(
@@ -155,12 +167,13 @@ def run_response(win, keyboard, question_type, *, lj_handle=None, neon=None, tri
                     section_end_events(trial_i, response.upper()),
                     metadata={"phase": "response", "trial_index": trial_i},
                 )
-            log_event(event_log, trial_i, "RESPONSE_CONFIRMED", exp_clock)
+            log_event(event_log, trial_i, "RESPONSE_CONFIRMED", rec.global_clock)
             return response, key.rt
 
 
 if __name__ == "__main__":
     from psychopy.hardware import keyboard as kb_module
+    from function.io.frame_logger import make_frame_log, FrameRecorder
 
     win = visual.Window(
         size=(1470, 956),
@@ -170,11 +183,13 @@ if __name__ == "__main__":
     )
 
     keyboard = kb_module.Keyboard()
+    rec = FrameRecorder(make_frame_log(phase="response_test", trial_id=0, stim_pair_id=""), core.Clock())
 
     response, rt = run_response(
         win=win,
         keyboard=keyboard,
         question_type="short",
+        rec=rec,
     )
 
     print("response:", response)

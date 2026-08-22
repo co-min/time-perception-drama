@@ -1,4 +1,4 @@
-﻿"""
+"""
 path_builder.py
 ---------------
 Single source of truth for all result-directory paths.
@@ -7,34 +7,17 @@ Directory schema
 ----------------
 data/
   sub-{subject_id}/
-    phase_0/
-      {char_id}/
+    ses-{session_id}/
+      trials.csv
+      session_info.json
+      event_log.csv
+      neon_event_log.csv
+      trial_{n}/
         frame_log.csv
-    phase_1/
-      {stim_pair_id}/
-        frame_log.csv
-        metadata.json
-    phase_2/
-      {stim_pair_id}/
-        frame_log.csv
-        metadata.json
-    phase_3/
-      {stim_pair_id}/
-        frame_log.csv
-        metadata.json
 """
 
 from pathlib import Path
 from function.config.settings import DATA_DIR
-
-
-# ── Phase folder names ────────────────────────────────────────────────────────
-PHASE_DIR_NAMES = {
-    "phase_0": "phase_0",
-    "phase_1": "phase_1",
-    "phase_2": "phase_2",
-    "phase_3": "phase_3",
-}
 
 
 def get_subject_dir(subject_id: str) -> Path:
@@ -42,37 +25,16 @@ def get_subject_dir(subject_id: str) -> Path:
     return DATA_DIR / f"sub-{subject_id}"
 
 
-def build_trial_save_dir(
-    subject_id: str,
-    phase: str,
-    stim_pair_id: str,
-) -> Path:
-    """
-    Construct (but do not create) the save directory for one trial/phase.
+def build_trial_frame_dir(session_dir: Path, trial_i: int) -> Path:
+    """Return (but do not create) the frame-log directory for one video trial.
 
-    Parameters
-    ----------
-    subject_id   : e.g. "001"
-    phase        : one of "phase_1", "phase_2", "phase_3"
-    stim_pair_id : e.g. "pair_001"
+    save_frame_log() creates the directory itself when it writes the CSV.
 
     Returns
     -------
-    Path  e.g. data/sub-001/phase_1/pair_001/
+    Path  e.g. session_dir / "trial_3"
     """
-    phase_dir = PHASE_DIR_NAMES.get(phase, phase)
-    return get_subject_dir(subject_id) / phase_dir / stim_pair_id
-
-
-def ensure_trial_save_dir(
-    subject_id: str,
-    phase: str,
-    stim_pair_id: str,
-) -> Path:
-    """Same as build_trial_save_dir but also creates the directory."""
-    p = build_trial_save_dir(subject_id, phase, stim_pair_id)
-    p.mkdir(parents=True, exist_ok=True)
-    return p
+    return session_dir / f"trial_{trial_i}"
 
 
 def get_session_dir(subject_id: str, session_id: str) -> Path:

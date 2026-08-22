@@ -21,6 +21,7 @@ ITI_DURATION      = 1.0          # inter-trial interval (seconds)
 FRAME_RATE        = 60           # Hz – used for frame log sanity checks
 VIDEO_SIZE        = (1280, 720)
 FIXATION_DURATION = 10          # seconds; fixation cross duration between video and response
+ANCHOR_DURATION = 60.0
 
 # ─── Trial Number Screen ──────────────────────────────────────────────────────
 TRIAL_NUMBER_DURATION      = 0.75         # seconds; how long the "Trial N" screen is shown
@@ -78,7 +79,7 @@ SELECTED_BUTTON_COLOR = "purple"
 BUTTON_COLOR = "gray"
 
 # ─── Neon (Pupil Labs Companion) ───────────────────────────────────────────────
-USE_NEON = True   # True: Neon Companion 연결, False: no-op
+USE_NEON = False   # True: Neon Companion 연결, False: no-op
 
 # ─── AprilTag (Pupil Labs Neon) ────────────────────────────────────────────────
 # Provisional — must be tested on the actual monitor and adjusted if necessary.
