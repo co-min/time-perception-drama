@@ -62,8 +62,8 @@ INSTRUCTION_WRAP_WIDTH = 1200  # px; keeps long lines from wrapping against the 
 
 INSTRUCTION_TEXT = (
     "이제부터 드라마 영상을 시청하게 됩니다.\n\n"
-    "각 영상이 끝난 후,"
-    "영상이 얼마나 길게 또는 짧게 느껴졌는지 생각해보세요.\n\n"
+    "각 영상이 끝난 후, "
+    "영상이 1분보다 길게 또는 짧게 느껴졌는지 생각해보세요.\n\n"
     "← 와 → 방향키를 눌러 응답을 선택하고,\n"
     "스페이스바를 눌러 선택을 확정해 주세요.\n\n"
     "준비가 되었다면 s를 눌러 시작해 주세요."
