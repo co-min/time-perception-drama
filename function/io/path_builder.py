@@ -37,6 +37,18 @@ def build_trial_frame_dir(session_dir: Path, trial_i: int) -> Path:
     return session_dir / f"trial_{trial_i}"
 
 
+def build_anchor_frame_dir(session_dir: Path, anchor_i: int) -> Path:
+    """Return (but do not create) the frame-log directory for one anchor occurrence.
+
+    save_frame_log() creates the directory itself when it writes the CSV.
+
+    Returns
+    -------
+    Path  e.g. session_dir / "anchor_3"
+    """
+    return session_dir / f"anchor_{anchor_i}"
+
+
 def get_session_dir(subject_id: str, session_id: str) -> Path:
     """Single source of truth for the session save directory.
 

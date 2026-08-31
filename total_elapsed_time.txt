@@ -3,5 +3,3 @@ elapsed time
 1. event_log.csv
 2. trial 0과 마지막 event의 global time 차이
 cf. 절대 시각이 필요하면 session_info.json의 datetime
-
-ㄴ

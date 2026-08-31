@@ -7,12 +7,14 @@ from psychopy.hardware import keyboard as kb_module
 from function.config.window_factory import create_window
 from function.config import settings as cfg
 from function.io.event_saver import save_event_log
-from function.io.frame_logger import FrameRecorder, make_frame_log
+from function.io.frame_logger import FrameRecorder, get_rows, make_frame_log
 from function.io.frame_marker import init_marker
-from function.io.path_builder import get_session_dir
+from function.io.frame_saver import save_frame_log
+from function.io.path_builder import build_anchor_frame_dir, get_session_dir
 from function.io.timing_diagnostics import save_timing_diagnostics
 from function.io.session_saver import save_session_info
 from function.io.trial_saver import append_trial_row
+from function.phases.anchoring import run_anchor
 from function.phases.data_loader import load_video_paths, validate_audio_paths
 from function.phases.phase import run_trial
 from function.phases.run_fixation import run_fixation
@@ -98,17 +100,25 @@ def main():
                         text = "다음은 1분간 지속되는 화면입니다."
                         )
 
-        anchor_rec = FrameRecorder(
-            make_frame_log(phase="anchor", trial_id=0, stim_pair_id=""),
-            exp_clock,
-        )
-        run_fixation(win, keyboard, anchor_rec, trial_i=0, event_log=event_log,
-                    duration=cfg.ANCHOR_DURATION)
-
+        # anchor: 첫 trial을 포함해 (n_videos // 10) trial마다 한 번씩, 총 10회 제시
+        ANCHOR_INTERVAL = max(1, n_videos // 10)
+        MAX_ANCHORS = 10
+        anchor_count = 0
 
         for trial_num, video_path in enumerate(
             video_paths, start=1,
         ):
+            if (trial_num - 1) % ANCHOR_INTERVAL == 0 and anchor_count < MAX_ANCHORS:
+                anchor_count += 1
+                anchor_rec = FrameRecorder(
+                    make_frame_log(phase="anchor", trial_id=trial_num, stim_pair_id=""),
+                    exp_clock,
+                )
+                run_anchor(win, anchor_rec, trial_i=trial_num, event_log=event_log)
+                if session_dir is not None:
+                    anchor_dir = build_anchor_frame_dir(session_dir, anchor_count)
+                    save_frame_log(get_rows(anchor_rec.frame_log), anchor_dir)
+
             response, rt = run_trial(
                 win=win,
                 keyboard=keyboard,
