@@ -17,11 +17,13 @@ SCREEN_NUMBER = 1
 
 # ─── Timing ──────────────────────────────────────────────────────────────────
 MAX_RESPONSE_TIME = 30.0          # seconds; None = unlimited
-ITI_DURATION      = 1.0          # inter-trial interval (seconds)
+ITI_DURATION      = 0.5          # inter-trial interval (seconds)
 FRAME_RATE        = 60           # Hz – used for frame log sanity checks
-VIDEO_SIZE        = (1536, 864)
-FIXATION_DURATION = 8         # seconds; fixation cross duration between video and response
-ANCHOR_DURATION = 3
+VIDEO_SIZE        = (1500, 800)
+FIXATION_DURATION = 2.0         # seconds; fixation cross duration between video and response
+
+ANCHOR_TOTAL_DURATION = 30
+ANCHOR_IMG_DURATION_SD = 0.8
 
 # ─── Trial Number Screen ──────────────────────────────────────────────────────
 TRIAL_NUMBER_DURATION      = 0.75         # seconds; how long the "Trial N" screen is shown
@@ -87,7 +89,7 @@ ENDING_TEXT = (
 
 
 # ─── Neon (Pupil Labs Companion) ───────────────────────────────────────────────
-USE_NEON = True   # True: Neon Companion 연결, False: no-op
+USE_NEON = False   # True: Neon Companion 연결, False: no-op
 
 # ─── AprilTag (Pupil Labs Neon) ────────────────────────────────────────────────
 # Provisional — must be tested on the actual monitor and adjusted if necessary.

@@ -13,6 +13,7 @@ from pathlib import Path
 from psychopy import visual, core
 from function.io.event_logger import log_event
 from utils.event_utils import check_escape, check_pause
+from function.config.settings import ANCHOR_TOTAL_DURATION, ANCHOR_IMG_DURATION_SD
 
 # Img size
 IMG_SIZE = (1536, 864)
@@ -22,14 +23,11 @@ CURRENT_FILE = Path(__file__)
 PROJECT_ROOT = CURRENT_FILE.parent.parent.parent
 IMG_ROOT =  PROJECT_ROOT / "stimuli" / "image"
 
-# Anchor timing
-ANCHOR_TOTAL_DURATION = 30
-ANCHOR_IMG_DURATION_SD = 0.8
 
 def _select_images():
     """ all image random seqence"""
     image_paths = sorted(
-        p for ext in ("*.jpg", ".jpeg", ".png") for p in IMG_ROOT.glob(ext)
+        p for ext in ("*.jpg", "*.jpeg", "*.png") for p in IMG_ROOT.glob(ext)
     )
     random.shuffle(image_paths)
     return image_paths    
@@ -118,20 +116,20 @@ def run_anchor(win, rec, *, trial_i=0, event_log=None):
                     phase_clock=image_clock,
                 )
 
-                # step4. 지정된 시간이 지나면 현재 이미지 종료
-                if image_clock.getTime() >= duration:
-                    event_name = ( 
-                        f"ANCHOR_IMG{img_i}_OFFSET_{image_path.stem}" 
-                    ) 
-                    log_event( 
-                        event_log, 
-                        trial_i, 
-                        event_name, 
-                        rec.global_clock, 
-                        flip_time=flip_time, 
-                    )
+            # step4. 지정된 시간이 지나면 현재 이미지 종료
+            if image_clock.getTime() >= duration:
+                event_name = ( 
+                    f"ANCHOR_IMG{img_i}_OFFSET_{image_path.stem}" 
+                ) 
+                log_event( 
+                    event_log, 
+                    trial_i, 
+                    event_name, 
+                    rec.global_clock, 
+                    flip_time=flip_time, 
+                )
 
-                    break
+                break
         
 
 
