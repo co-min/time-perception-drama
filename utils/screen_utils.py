@@ -11,8 +11,8 @@ def get_subject_info():
     dlg.addField("Subject ID:", "001")
     dlg.addField("Session:",    "1")
     data = dlg.show()
-    if not dlg.OK:
-        core.quit()
+    # if not dlg.OK:
+    #     core.quit()
     return {
         "subject_id": data[0].strip(),
         "session":    data[1].strip(),

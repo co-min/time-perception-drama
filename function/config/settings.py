@@ -1,5 +1,8 @@
 import platform
 from pathlib import Path
+from psychopy import prefs
+
+
 
 # ─── Paths ───────────────────────────────────────────────────────────────────
 ROOT_DIR     = Path(__file__).resolve().parents[2]
@@ -10,17 +13,17 @@ DATA_DIR     = ROOT_DIR / "data"
 # ─── Window ───────────────────────────────────────────────────────────────────
 WINDOW_SIZE      = (1920, 1080)   # TODO: adjust to your display
 WINDOW_UNITS     = "pix"
-WINDOW_FULLSCR   = True          # Set True for actual experiment
+WINDOW_FULLSCR   = False  # Set True for actual experiment
 BACKGROUND_COLOR = "black"      
 MONITOR_NAME     = "testMonitor"  # TODO: calibrate your monitor
-SCREEN_NUMBER = 1
+SCREEN_NUMBER = 0
 
 # ─── Timing ──────────────────────────────────────────────────────────────────
 MAX_RESPONSE_TIME = 30.0          # seconds; None = unlimited
 ITI_DURATION      = 0.5          # inter-trial interval (seconds)
 FRAME_RATE        = 60           # Hz – used for frame log sanity checks
 VIDEO_SIZE        = (1500, 800)
-FIXATION_DURATION = 2.0         # seconds; fixation cross duration between video and response
+FIXATION_DURATION = 10         # replay seconds; fixation cross duration between video and response
 
 ANCHOR_TOTAL_DURATION = 30
 ANCHOR_IMG_DURATION_SD = 0.8
@@ -42,7 +45,7 @@ CONFIRM_KEY = "space"
 QUIT_KEY = "escape"
 PAUSE_KEY = "p"
 
-RESPONSE_QUESTION = "이 영상의 길이는 1분과 비교했을 때 어땠나요?"
+RESPONSE_QUESTION = "이 영상의 길이는 30초와 비교했을 때 어땠나요?"
 RESPONSE_TEXT_HEIGHT = 40
 
 SHORT_TEXT = "짧았다"
@@ -63,9 +66,9 @@ START_KEY = "s"
 INSTRUCTION_WRAP_WIDTH = 1200  # px; keeps long lines from wrapping against the window edge
 
 INSTRUCTION_TEXT = (
-    "이제부터 드라마 영상을 시청하게 됩니다.\n\n"
+    "이제부터 영상을 시청하게 됩니다.\n\n"
     "각 영상이 끝난 후, "
-    "영상이 1분보다 길게 또는 짧게 느껴졌는지 생각해보세요.\n\n"
+    "영상이 30초보다 길게 또는 짧게 느껴졌는지 생각해보세요.\n\n"
     "← 와 → 방향키를 눌러 응답을 선택하고,\n"
     "스페이스바를 눌러 선택을 확정해 주세요.\n\n"
     "준비가 되었다면 s를 눌러 시작해 주세요."
@@ -87,6 +90,8 @@ ENDING_TEXT = (
     "종료하려면 ESC 키를 눌러주세요."
 )
 
+ANCHOR_INSTRCTION="다음은 30초간 지속되는 화면입니다."
+
 
 # ─── Neon (Pupil Labs Companion) ───────────────────────────────────────────────
 USE_NEON = False   # True: Neon Companion 연결, False: no-op
@@ -102,13 +107,5 @@ APRILTAG_POSITIONS = (
     (0.70, 0.44),
 )
 
-# ─── TEMPORARY DIAGNOSTIC (no_audio A/B test) ──────────────────────────────────
-# Remove this whole block, and its call sites in main.py / phase.py /
-# run_video.py, once the audio-timing comparison is done.
-NO_AUDIO_DIAGNOSTIC = True   # TEMPORARY DIAGNOSTIC: True -> MovieStim(noAudio=True)
 
-# Set to an int (e.g. 42) for Run A AND Run B so random.sample/random.shuffle
-# in main.py produce the identical video order in both runs. None = normal,
-# unseeded production randomization (unaffected).
-DIAGNOSTIC_FIXED_SEED = True  # TEMPORARY DIAGNOSTIC
 

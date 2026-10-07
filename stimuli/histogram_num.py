@@ -7,10 +7,10 @@ VIDEO_DIR = Path("stimuli/video")
 OUTPUT_PATH = Path("stimuli/histogram_num.png")
 
 # x축 구간 (초 단위, 3초 간격)
-BIN_EDGES = [53, 56, 59, 62, 65, 68]
-BIN_LABELS = ["53-56s", "56-59s", "59-62s", "62-65s", "65-68s"]
+BIN_EDGES = [23, 26, 29, 32, 35, 38]
+BIN_LABELS = ["23-26s", "26-29s", "29-32s", "32-35s", "35-38s"]
 
-# 파일명 맨 앞의 초 숫자를 읽어옴 (예: "60.03s_type1.mp4" -> 60.03)
+# 파일명 맨 앞의 초 숫자를 읽어옴
 FILENAME_PATTERN = re.compile(r"^(\d+(?:\.\d+)?)s")
 
 
@@ -27,7 +27,7 @@ def get_video_seconds():
 
 
 def count_videos_per_bin(seconds_list):
-    """구간별(53-56s, 56-59s, ...) 영상 개수를 세서 리스트로 반환"""
+    """구간별 영상 개수를 세서 리스트로 반환"""
     counts = [0] * len(BIN_LABELS)
 
     for seconds in seconds_list:

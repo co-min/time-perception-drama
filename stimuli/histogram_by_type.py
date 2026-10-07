@@ -7,11 +7,10 @@ VIDEO_DIR = Path("stimuli/video")
 OUTPUT_PATH = Path("stimuli/histogram_by_type.png")
 
 # x축 구간 (초 단위, 3초 간격)
-BIN_EDGES = [53, 56, 59, 62, 65, 68]
-BIN_LABELS = ["53-56s", "56-59s", "59-62s", "62-65s", "65-68s"]
+BIN_EDGES = [23, 26, 29, 32, 35, 38]
+BIN_LABELS = ["23-26s", "26-29s", "29-32s", "32-35s", "35-38s"]
 
 # 파일명에서 초 숫자와 type을 뽑아냄
-# 예: "60.03s_type2_AB.mp4" -> seconds=60.03, type="type2"
 FILENAME_PATTERN = re.compile(r"^(\d+(?:\.\d+)?)s_(type1|type2)")
 
 TYPE_NAMES = ["type1", "type2"]
@@ -35,7 +34,7 @@ def get_video_seconds_by_type():
 
 
 def count_videos_per_bin(seconds_list):
-    """구간별(53-56s, 56-59s, ...) 영상 개수를 세서 리스트로 반환"""
+    """구간별 영상 개수를 세서 리스트로 반환"""
     counts = [0] * len(BIN_LABELS)
 
     for seconds in seconds_list:
@@ -46,7 +45,7 @@ def count_videos_per_bin(seconds_list):
                 counts[i] += 1
                 break
         else:
-            print(f"경고: {seconds}s는 구간(53-68s) 밖이라 히스토그램에 포함되지 않았습니다.")
+            print(f"경고: {seconds}s는 구간 밖이라 히스토그램에 포함되지 않았습니다.")
 
     return counts
 
@@ -85,7 +84,7 @@ def plot_histograms(seconds_by_type):
     fig.suptitle("Number of videos per time section, by type")
     fig.tight_layout()
     fig.savefig(OUTPUT_PATH, dpi=150)
-    print(f"히스토그램 저장 완료: {OUTPUT_PATH}")
+    print(f"Saved histogram: {OUTPUT_PATH}")
 
 
 def main():

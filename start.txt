@@ -1,0 +1,15 @@
+1. 가상환경 설치
+    venv: 
+        # python -m venv .venv 
+
+        py -3.10 -m venv 가상환경이름
+        .venv\Scripts\activate
+
+    python: 
+        version 3.10.xx
+
+2. psychopy setup 설치
+    python set_up.py
+    
+3. main 코드 실행
+    python main.py

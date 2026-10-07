@@ -1,13 +1,27 @@
+# replay 
 from psychopy import visual, core
-
 from function.config.settings import (
-    TEXT_COLOR, FIXATION_DURATION, QUIT_KEY, PAUSE_KEY,
+    TEXT_COLOR, FIXATION_DURATION, QUIT_KEY, PAUSE_KEY, QUESTION_POSITION, RESPONSE_TEXT_HEIGHT
 )
 from function.io.event_logger import log_event
 from function.phases.run_pause import run_pause
 
 
 def run_fixation(win, keyboard, rec, *, trial_i=0, event_log=None, duration=FIXATION_DURATION):
+
+    # ─────────────────────────────────────────────────────────────
+    # Question
+    # ─────────────────────────────────────────────────────────────
+
+    question = visual.TextStim(
+        win=win,
+        text="영상의 내용을 떠올려 보세요",
+        pos=QUESTION_POSITION,
+        color=TEXT_COLOR,
+        height=RESPONSE_TEXT_HEIGHT,
+    )
+
+
     fixation = visual.TextStim(
         win=win,
         text="+",
@@ -25,6 +39,7 @@ def run_fixation(win, keyboard, rec, *, trial_i=0, event_log=None, duration=FIXA
         if first_flip:
             win.callOnFlip(fixation_clock.reset)
 
+        question.draw()
         fixation.draw()
         flip_time = rec.flip_and_log(win)
         if first_flip:

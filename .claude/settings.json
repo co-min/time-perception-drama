@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/niobi/AppData/Local/Programs/Python/Python311/Lib/site-packages/psychopy/visual/movies/**)",
+      "Bash(python -c ' *)",
+      "Bash(.venv310/Scripts/python -c \"import psychopy; print\\(psychopy.__version__\\)\")",
+      "Bash(.venv310/Scripts/python -c ' *)",
+      "Bash(rm -f test_err.log)",
+      "Bash(rm -f psy_err.log)",
+      "Bash(rm -f err.log)"
+    ]
+  }
+}

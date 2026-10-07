@@ -97,12 +97,12 @@ def main():
         send_trigger(lj, TRIG_EXP_START)
 
         run_instruction(win, keyboard,
-                        text = "다음은 1분간 지속되는 화면입니다."
+                        text = cfg.ANCHOR_INSTRCTION
                         )
 
         # anchor: 첫 trial을 포함해 (n_videos // 10) trial마다 한 번씩, 총 10회 제시
         ANCHOR_INTERVAL = max(1, n_videos // 10)
-        MAX_ANCHORS = 10
+        MAX_ANCHORS = 1
         anchor_count = 0
 
         for trial_num, video_path in enumerate(
@@ -131,9 +131,12 @@ def main():
                 session_dir=session_dir,
             )
 
+            rel_parts = video_path.relative_to(cfg.STIMULUS_DIR).parts
             trial_row = {
                 "trial":         trial_num,
                 "video":         video_path.name,
+                "type":          rel_parts[0],
+                "category":      rel_parts[1],
                 "response":      response,
                 "rt":            rt,
             }
