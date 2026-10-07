@@ -6,8 +6,9 @@ from psychopy import prefs
 
 # ─── Paths ───────────────────────────────────────────────────────────────────
 ROOT_DIR     = Path(__file__).resolve().parents[2]
-STIMULUS_DIR = ROOT_DIR / "stimuli" / "video"
-AUDIO_DIR = ROOT_DIR / "stimuli" / "audio"
+TEST_MODE    = False  # True: stimuli/test_video, stimuli/test_audio 사용
+STIMULUS_DIR = ROOT_DIR / "stimuli" / ("test_video" if TEST_MODE else "video")
+AUDIO_DIR    = ROOT_DIR / "stimuli" / ("test_audio" if TEST_MODE else "audio")
 DATA_DIR     = ROOT_DIR / "data"
 
 # ─── Window ───────────────────────────────────────────────────────────────────
