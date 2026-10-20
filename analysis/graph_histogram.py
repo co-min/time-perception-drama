@@ -1,5 +1,5 @@
-# x axis: 5 section of time (53~68)
-# 53-56s, 56-59s, 59-62s, 62-65s, 65-68s
+# x axis: 5 section of time (23~38)
+# 23-26s, 26-29s, 29-32s, 32-35s, 35-38s
 # y axis: count of videos 
 
 from pathlib import Path
@@ -49,9 +49,7 @@ df["duration"] = df["video"].apply(extract_duration)
 
 # Excluded video
 EXCLUDED_VIDEOS = [
-    "53.14s_type2_AB.mp4",
-    "54.02s_type1.mp4",
-    "65.06s_type1.mp4",
+
 ]
 
 df = df[
@@ -64,11 +62,11 @@ df=df[
 ].copy()
 
 BIN_LABELS = [
-    "53-56",
-    "56-59",
-    "59-62",
-    "62-65",
-    "65-68",
+    "23-26",
+    "26-29",
+    "29-32",
+    "32-35",
+    "35-38",
 ]
 
 ## Total video count
@@ -76,7 +74,7 @@ total_videos = df.shape[0]
 print(f"전체 영상 수: {total_videos}")
 
 ## Count videos per duration bin
-bin_edges = [53, 56, 59, 62, 65, 68]
+bin_edges = [ 23, 26, 29, 32, 35, 38]
 
 counts = []
 for low, high in zip(bin_edges[:-1], bin_edges[1:]):

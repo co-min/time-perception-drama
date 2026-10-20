@@ -1,7 +1,7 @@
-# x axis: 5 section of time (53~68)
-    # 53-56s, 56-59s, 59-62s, 62-65s, 65-68s
+# x axis: 5 section of time (23~38)
+    # 23-26s, 26-29s, 29-32s, 32-35s, 35-38s
 # y axis: P(Long) 
-# excluding 53.14s_type2_AB, 54.02s_type1, 65.06s_type1
+
 
 # python analysis/plot_psychometric.py --sub 
 
@@ -67,9 +67,7 @@ df["duration"] = df["video"].apply(extract_duration)
 
 # Excluded video
 EXCLUDED_VIDEOS = [
-    "53.14s_type2_AB.mp4",
-    "54.02s_type1.mp4",
-    "65.06s_type1.mp4",
+
 ]
 
 # 제외 목록에 없는 영상만 선택하기
@@ -96,15 +94,16 @@ df["is_long"] = df["response"].map(response_map)
 
 ## Duration bin 5개 구간 만들기
 
-TIME_BINS = [53, 56, 59, 62, 65, 68]
+TIME_BINS =  [23, 26, 29, 32, 35, 38]
 
 BIN_LABELS = [
-    "53-56",
-    "56-59",
-    "59-62",
-    "62-65",
-    "65-68",
+    "23-26",
+    "26-29",
+    "29-32",
+    "32-35",
+    "35-38",
 ]
+
 
 df["duration_bin"] = pd.cut(
     df["duration"],

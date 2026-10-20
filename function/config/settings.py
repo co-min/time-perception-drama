@@ -14,10 +14,13 @@ DATA_DIR     = ROOT_DIR / "data"
 # ─── Window ───────────────────────────────────────────────────────────────────
 WINDOW_SIZE      = (1920, 1080)   # TODO: adjust to your display
 WINDOW_UNITS     = "pix"
-WINDOW_FULLSCR   = False  # Set True for actual experiment
+WINDOW_FULLSCR   = True  # Set True for actual experiment
 BACKGROUND_COLOR = "black"      
 MONITOR_NAME     = "testMonitor"  # TODO: calibrate your monitor
 SCREEN_NUMBER = 0
+
+# ─── Trial Order ───────────────────────────────────────────────────────────────
+VIDEO_ORDER_SEED = 42  # fixed seed so every participant sees videos in the same order
 
 # ─── Timing ──────────────────────────────────────────────────────────────────
 MAX_RESPONSE_TIME = 30.0          # seconds; None = unlimited

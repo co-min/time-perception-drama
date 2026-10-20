@@ -64,8 +64,8 @@ def main():
     # # video_path[:2] slicing
     video_paths = video_path
 
-    # # 영상 순서 랜덤화
-    random.shuffle(video_paths)
+    # # 영상 순서 랜덤화 (고정 seed: 모든 participant가 동일한 순서로 시청)
+    random.Random(cfg.VIDEO_ORDER_SEED).shuffle(video_paths)
 
 
     # 전체 영상 중 랜덤하게 선택
@@ -136,7 +136,7 @@ def main():
                 "trial":         trial_num,
                 "video":         video_path.name,
                 "type":          rel_parts[0],
-                "category":      rel_parts[1],
+                "theme":         rel_parts[1],
                 "response":      response,
                 "rt":            rt,
             }

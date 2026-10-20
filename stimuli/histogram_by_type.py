@@ -21,7 +21,7 @@ def get_video_seconds_by_type():
     """video 폴더의 각 mp4 파일에서 (초, type)을 뽑아 type별 리스트로 반환"""
     seconds_by_type = {"type1": [], "type2": []}
 
-    for video_path in sorted(VIDEO_DIR.glob("*.mp4")):
+    for video_path in sorted(VIDEO_DIR.rglob("*.mp4")):
         match = FILENAME_PATTERN.match(video_path.name)
         if match:
             seconds = float(match.group(1))
