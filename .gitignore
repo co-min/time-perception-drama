@@ -7,3 +7,4 @@ data/
 .venv310/
 audio_for_60s/
 video_for_60s/
+analysis/outfile_data/

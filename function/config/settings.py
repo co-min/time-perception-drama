@@ -6,7 +6,7 @@ from psychopy import prefs
 
 # ─── Paths ───────────────────────────────────────────────────────────────────
 ROOT_DIR     = Path(__file__).resolve().parents[2]
-TEST_MODE    = False  # True: stimuli/test_video, stimuli/test_audio 사용
+TEST_MODE    = True  # True: stimuli/test_video, stimuli/test_audio 사용
 STIMULUS_DIR = ROOT_DIR / "stimuli" / ("test_video" if TEST_MODE else "video")
 AUDIO_DIR    = ROOT_DIR / "stimuli" / ("test_audio" if TEST_MODE else "audio")
 DATA_DIR     = ROOT_DIR / "data"
@@ -98,7 +98,7 @@ ANCHOR_INSTRCTION="다음은 30초간 지속되는 화면입니다."
 
 
 # ─── Neon (Pupil Labs Companion) ───────────────────────────────────────────────
-USE_NEON = False   # True: Neon Companion 연결, False: no-op
+USE_NEON = True   # True: Neon Companion 연결, False: no-op
 
 # ─── AprilTag (Pupil Labs Neon) ────────────────────────────────────────────────
 # Provisional — must be tested on the actual monitor and adjusted if necessary.
