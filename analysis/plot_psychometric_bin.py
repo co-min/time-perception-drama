@@ -1,9 +1,9 @@
 # x axis: 5 section of time (23~38)
     # 23-26s, 26-29s, 29-32s, 32-35s, 35-38s
 # y axis: P(Long) 
+# bining
 
-
-# python analysis/plot_psychometric.py --sub 
+# python analysis/plot_psychometric_bin.py --sub 
 
 import argparse # argparse
 from pathlib import Path
@@ -36,7 +36,7 @@ def extract_duration(video_name):
 
 ## Command Line
 parser = argparse.ArgumentParser(
-    description="Plot psychometric"
+    description="Plot psychometric by bining"
 )
 
 parser.add_argument(
@@ -172,7 +172,7 @@ fig.tight_layout()
 out_dir = OUTFILE_ROOT / f"sub-{subject_id}"
 out_dir.mkdir(parents=True, exist_ok=True)
 
-out_path = out_dir / f"sub-{subject_id}_psychometric.png"
+out_path = out_dir / f"sub-{subject_id}_psychometric_bin.png"
 fig.savefig(out_path, dpi=150)
 
 print(f"\nSaved figure to {out_path}")

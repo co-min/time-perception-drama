@@ -6,12 +6,12 @@ from psychopy import prefs
 
 # ─── Paths ───────────────────────────────────────────────────────────────────
 ROOT_DIR     = Path(__file__).resolve().parents[2]
-TEST_MODE    = True  # True: stimuli/test_video, stimuli/test_audio 사용
+TEST_MODE    = False  # True: stimuli/test_video, stimuli/test_audio 사용
 STIMULUS_DIR = ROOT_DIR / "stimuli" / ("test_video" if TEST_MODE else "video")
 AUDIO_DIR    = ROOT_DIR / "stimuli" / ("test_audio" if TEST_MODE else "audio")
 DATA_DIR     = ROOT_DIR / "data"
 
-# ─── Window ───────────────────────────────────────────────────────────────────
+# ─── Window ──────────────────────────────────────────────────────────────────
 WINDOW_SIZE      = (1920, 1080)   # TODO: adjust to your display
 WINDOW_UNITS     = "pix"
 WINDOW_FULLSCR   = True  # Set True for actual experiment

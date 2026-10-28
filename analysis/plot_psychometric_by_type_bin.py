@@ -3,6 +3,10 @@
 # y axis: P(Long)
 # type1 vs type2 비교 (한 figure에 두 곡선)
 
+# bining
+
+# python analysis/plot_psychometric_bin.py --sub 
+
 
 import argparse # argparse
 from pathlib import Path
