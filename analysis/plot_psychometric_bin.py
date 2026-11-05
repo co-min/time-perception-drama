@@ -8,6 +8,7 @@
 import argparse # argparse
 from pathlib import Path
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 
 # 1. load
@@ -146,16 +147,25 @@ print("\nNumber of trials by duration bin:")
 print(n_trials)
 
 
+# Standard error of the proportion: sqrt(p * (1-p) / n)
+sem = np.sqrt(p_long * (1 - p_long) / n_trials)
+
+print("\nSEM by duration bin:")
+print(sem)
+
+
 ## Plot
 fig, ax = plt.subplots(figsize=(6, 4))
 
-ax.plot(
+ax.errorbar(
     p_long.index.astype(str),
     p_long.values,
+    yerr=sem.values,
     marker="o",
     color="#8f3bf6",
     linewidth=2,
     markersize=8,
+    capsize=4,
 )
 
 ax.set_xlabel("Duration bin (s)")

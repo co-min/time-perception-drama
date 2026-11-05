@@ -5,12 +5,13 @@
 
 # bining
 
-# python analysis/plot_psychometric_bin.py --sub 
+# python analysis/plot_psychometric_by_type_bin.py --sub 
 
 
 import argparse # argparse
 from pathlib import Path
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 
 # 1. load
@@ -158,6 +159,15 @@ print("\nNumber of trials by type & duration bin:")
 print(n_trials_by_type)
 
 
+# Standard error of the proportion: sqrt(p * (1-p) / n)
+sem_by_type = np.sqrt(
+    p_long_by_type * (1 - p_long_by_type) / n_trials_by_type
+)
+
+print("\nSEM by type & duration bin:")
+print(sem_by_type)
+
+
 ## Plot
 fig, ax = plt.subplots(figsize=(6, 4))
 
@@ -171,14 +181,17 @@ for video_type, style in TYPE_STYLES.items():
         continue
 
     p_long = p_long_by_type.loc[video_type]
+    sem = sem_by_type.loc[video_type]
 
-    ax.plot(
+    ax.errorbar(
         p_long.index.astype(str),
         p_long.values,
+        yerr=sem.values,
         marker=style["marker"],
         color=style["color"],
         linewidth=2,
         markersize=8,
+        capsize=4,
         label=video_type,
     )
 
