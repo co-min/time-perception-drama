@@ -28,6 +28,13 @@ OUTFILE_ROOT = CURRENT_FILE.parent.parent / "outfile_data"
 ALPHA = 0.05  # likelihood-ratio test level for "data support beta1 > 0"
 JITTER_SEED = 0
 DEFAULT_JITTER = 0.02  # max vertical offset of raw points, visualization only
+DURATION_BINS = [  # (label, lower, upper), each bin is [lower, upper)
+    ("S1", 23, 26),
+    ("S2", 26, 29),
+    ("S3", 29, 32),
+    ("S4", 32, 35),
+    ("S5", 35, 38),
+]
 
 
 ## Step 2. Load Data
@@ -177,9 +184,30 @@ def calculate_metrics(beta0, beta1, durations):
     return {"pse": pse, "slope": slope, "pse_in_range": pse_in_range}
 
 
+## Observed P(Long)
+def calculate_observed_probabilities(durations, responses, bins=DURATION_BINS):
+    """Proportion of Long responses and mean duration in each [lower, upper) bin."""
+    durations = np.asarray(durations, dtype=float)
+    responses = np.asarray(responses, dtype=float)
+
+    rows = []
+    for label, lower, upper in bins:
+        in_bin = (durations >= lower) & (durations < upper)
+        n_trials = int(in_bin.sum())
+        n_long = int(responses[in_bin].sum())
+        rows.append({
+            "bin": f"{label} [{lower}, {upper})",
+            "mean_duration": durations[in_bin].mean() if n_trials else np.nan,  # empty bin: not drawn
+            "n_trials": n_trials,
+            "n_long": n_long,
+            "observed_p_long": n_long / n_trials if n_trials else np.nan,
+        })
+    return pd.DataFrame(rows)
+
+
 ## Plot
 def plot_psychometric(
-    durations, responses, fit, metrics, subject_id, out_path, jitter=DEFAULT_JITTER
+    durations, responses, observed, fit, metrics, subject_id, out_path, jitter=DEFAULT_JITTER
 ):
     durations = np.asarray(durations, dtype=float)
     responses = np.asarray(responses, dtype=float)
@@ -204,6 +232,13 @@ def plot_psychometric(
             psychometric_function(duration_range, fit["beta0"], fit["beta1"]),
             color="#1d4ed8", linewidth=2, label="Fitted logistic P(Long)",
         )
+
+    # zorder keeps the observed points above the fitted curve
+    ax.scatter(
+        observed["mean_duration"], observed["observed_p_long"],
+        s=70, color="orange", edgecolors="black", linewidths=1, zorder=3,
+        label="Observed P(Long)",
+    )
 
     pse, slope = metrics["pse"], metrics["slope"]
     if metrics["pse_in_range"]:
@@ -272,13 +307,14 @@ def main():
 
     fit = fit_model(durations, responses)
     metrics = calculate_metrics(fit["beta0"], fit["beta1"], durations)
+    observed = calculate_observed_probabilities(durations, responses)
 
     out_dir = OUTFILE_ROOT / f"sub-{subject_id}" / "psychometric"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     figure_path = out_dir / f"sub-{subject_id}_wichmann_single.png"
     plot_psychometric(
-        durations, responses, fit, metrics, subject_id, figure_path, jitter=args.jitter
+        durations, responses, observed, fit, metrics, subject_id, figure_path, jitter=args.jitter
     )
 
     estimates = {"subject": subject_id, **fit, **metrics}
@@ -292,6 +328,8 @@ def main():
         print("  WARNING: PSE is outside the stimulus range (extrapolated)")
     if fit["message"]:
         print(f"  WARNING: {fit['message']}")
+    print("Observed P(Long) by duration bin:")
+    print(observed.to_string(index=False, float_format="%.3f"))
     print(f"Saved figure to {figure_path}")
     print(f"Saved estimates to {estimates_path}")
 
