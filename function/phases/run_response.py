@@ -4,6 +4,7 @@ from psychopy import visual, core
 
 from function.config.settings import (
     TEXT_COLOR,
+    FONT,
     MAX_RESPONSE_TIME,
     SHORT_KEY,
     LONG_KEY,
@@ -84,6 +85,8 @@ def run_response(
         pos=SHORT_POSITION,
         color=TEXT_COLOR,
         height=RESPONSE_TEXT_HEIGHT,
+        font=FONT,
+        bold=True,
     )
 
     long_text = visual.TextStim(
@@ -92,6 +95,8 @@ def run_response(
         pos=LONG_POSITION,
         color=TEXT_COLOR,
         height=RESPONSE_TEXT_HEIGHT,
+        font=FONT,
+        bold=True,
     )
 
     # ─────────────────────────────────────────────────────────────
